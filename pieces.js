@@ -1,10 +1,12 @@
 // Pour manipuler nos donnees etant au format JSON nous devons les importer dans notre code
 // Pour cela on va utiliser la focntion "fetch"
 
+import { ajoutListenerAvis } from "./avis.js";
+
 // const reponse = await fetch("pieces-autos.json")  // Recuperation des pieces depuis le fichier 
 // const pieces = await reponse.json(); // on met la liste de pieces  recuperer dans "pieces" sous format JSON
 // Ou 
-const pieces = await fetch("pieces-autos.json").then(pieces => pieces.json())
+const pieces = await fetch("http://localhost:8081/pieces").then(pieces => pieces.json())
 
 // Preier affichage de la page
 affichePieces(pieces)
@@ -30,6 +32,10 @@ function affichePieces(listePieces){
         descriptionElement.innerText = article.description ?? "Pas de description pour le moment";
         const stockElement = document.createElement("p")
         stockElement.innerText = article.disponibilite ? "En stock" : "Rupture de stock";
+        const avisBouton = document.createElement("button");
+        avisBouton.dataset.id = article.id;
+        avisBouton.textContent = "Afficher les  avis"
+        
         
         
         // Création d’une balise dédiée à une pièce automobile
@@ -41,8 +47,11 @@ function affichePieces(listePieces){
         pieceElement.appendChild(categorieElement)
         pieceElement.appendChild(descriptionElement)
         pieceElement.appendChild(stockElement)
+        pieceElement.appendChild(avisBouton)
     
     }
+    // Ajout de la fonction ajoutListenerAvis
+    ajoutListenerAvis();
 }
 
 
