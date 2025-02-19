@@ -1,16 +1,29 @@
 // Pour manipuler nos donnees etant au format JSON nous devons les importer dans notre code
 // Pour cela on va utiliser la focntion "fetch"
 
-import { ajoutListenerAvis } from "./avis.js";
+import { ajoutListenerAvis, ajoutListenerEnvoyerAvis } from "./avis.js";
 
-// const reponse = await fetch("pieces-autos.json")  // Recuperation des pieces depuis le fichier 
-// const pieces = await reponse.json(); // on met la liste de pieces  recuperer dans "pieces" sous format JSON
-// Ou 
-const pieces = await fetch("http://localhost:8081/pieces").then(pieces => pieces.json())
+// Recuperation des pieces eventuellement stockees dans le localStorage ceci doit etre fait avant l'appel de la fonction fetch
+let  pieces = window.localStorage.getItem("pieces");
 
-// Preier affichage de la page
+if(pieces === null) { // si le code s'execute pour la premiere fois alors le localStorage sera vide donc recuperer les donnees depuis l"API
+    // Recuperatrion des pieces depuis l'API
+    pieces = await fetch("http://localhost:8081/pieces/").then(pieces => pieces.json())
+    // Transformation des pieces en JSON pour le localStorage
+    const valeurPieces = JSON.stringify(pieces)
+
+    // Stockage des informations dans le localStorage
+    window.localStorage.setItem("pieces", valeurPieces);
+}else{
+    pieces = JSON.parse(pieces) // Convert a JSON string into an object
+}
+window.localStorage.removeItem("pieces")
+
+
+// Premiere affichage de la page
 affichePieces(pieces)
-
+// Ajout du listener au formuailre envoyer Avis
+ajoutListenerEnvoyerAvis();
 
 // Fonctionn qui genere toute la page web
 function affichePieces(listePieces){
@@ -164,6 +177,13 @@ inputRange.addEventListener("change", (event) => {
     console.log(piecesFiltrees)
     document.querySelector(".fiches").innerHTML = ''
     affichePieces(piecesFiltrees)
+})
+
+// Effacer le contenu du localStorage
+const btnMaj = document.querySelector(".btn-maj")
+btnMaj.addEventListener("click", () => {
+    window.localStorage.removeItem("pieces")
+    console.log("Suppression des donnees du localStorage")
 })
 
 
