@@ -1,8 +1,8 @@
 // Pour manipuler nos donnees etant au format JSON nous devons les importer dans notre code
 // Pour cela on va utiliser la focntion "fetch"
 
-import { ajoutListenerAvis, ajoutListenerEnvoyerAvis } from "./avis.js";
-
+import { ajoutListenerAvis, ajoutListenerEnvoyerAvis, afficherAvis, afficherGraphiqueAvis, afficherAvisDispo } from "./avis.js";
+// import { Chart } from "https://cdn.jsdelivr.net/npm/chart.js"
 // Recuperation des pieces eventuellement stockees dans le localStorage ceci doit etre fait avant l'appel de la fonction fetch
 let  pieces = window.localStorage.getItem("pieces");
 
@@ -17,7 +17,7 @@ if(pieces === null) { // si le code s'execute pour la premiere fois alors le loc
 }else{
     pieces = JSON.parse(pieces) // Convert a JSON string into an object
 }
-window.localStorage.removeItem("pieces")
+// window.localStorage.removeItem("pieces")
 
 
 // Premiere affichage de la page
@@ -48,11 +48,13 @@ function affichePieces(listePieces){
         const avisBouton = document.createElement("button");
         avisBouton.dataset.id = article.id;
         avisBouton.textContent = "Afficher les  avis"
+        // console.log(avisBouton)
         
         
         
         // Création d’une balise dédiée à une pièce automobile
         const pieceElement = document.createElement("article");
+        pieceElement.dataset.id = pieces[i].id;
         sectionFiches.appendChild(pieceElement)
         pieceElement.appendChild(imageElement)
         pieceElement.appendChild(nomElement)
@@ -67,6 +69,18 @@ function affichePieces(listePieces){
     ajoutListenerAvis();
 }
 
+// Pour chaque pieces si il a une avis deja dans le localStorage alors affuicher l'avis
+for(let i = 0; i < pieces.length; i++){
+    const id = pieces[i].id;
+    const avisJSON = window.localStorage.getItem(`avis-piece-${id}`);
+    const avis = JSON.parse(avisJSON);
+
+    if(avis !== null){
+        const pieceElement = document.querySelector(`article[data-id="${id}"]`);
+        // console.log(pieceElement)
+        afficherAvis(pieceElement, avis);
+    }
+}
 
 // Gestion des boutons
 const boutonTrier = document.querySelector(".btn-trier")
@@ -187,8 +201,10 @@ btnMaj.addEventListener("click", () => {
 })
 
 
+// Appel de la fct pour afficherGraphique avis
+ await afficherGraphiqueAvis();
 
-
+ await afficherAvisDispo();
 
 
 

@@ -5,6 +5,9 @@
 		<title>Les Bonnes Pièces</title>
 		<link rel="stylesheet" href="styles.css">
 		<script defer type="module" src="pieces.js"></script>
+		<script  defer src="node_modules/chart.js/dist/chart.umd.js"></script> <!-- Ajout du lien vers ma librairie local "Chartjs" -->
+		<!-- <script  defer src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+		
 	</head>
 	<body>
 		<header>
@@ -41,6 +44,16 @@
 				</form>
 				<h3>Donnees</h3>
 				<button class="btn-maj">Mettre a jour les pieces</button>
+				<!-- Ajout des avis via chartJS -->
+				<div>
+					<h3>Apercus des avis</h3>
+					<canvas id="graphique-avis" width="300" height="300"></canvas>
+				</div>
+				<!-- commentaire en fct des pieces disponibles et non disponibles -->
+				 <div>
+					<h3>commentaire en fct de la disponiblites des pieces</h3>
+					<canvas id="graphique-dispo" width="300" height="300"></canvas>
+				 </div>
 			</section>
 
 			<!-- Fiches produits -->
@@ -54,5 +67,9 @@
 				
 			</section>
 		</main>
+		<footer>
+			<p>@Copyright-2025 : OumarKingDev</p>
+		</footer>
+
 	</body>
 </html>
